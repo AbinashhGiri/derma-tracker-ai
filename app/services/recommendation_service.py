@@ -13,7 +13,8 @@ class RecommendationService:
         self.routine_agent = RoutinePlannerAgent()
 
     def generate_recommendations(self, query: SkinQuery) -> RecommendationResponse:
-        analysis = self.query_agent.analyze_query(query)
+        analysis_data = self.query_agent.analyze_query(query)
+        analysis = self._build_analysis_model(analysis_data)
         products = self.product_agent.recommend(analysis)
         routine = self.routine_agent.build_routine(analysis)
 
@@ -22,3 +23,19 @@ class RecommendationService:
             products=products,
             routine=routine,
         )
+
+    def _build_analysis_model(self, analysis_data: dict):
+        from app.models import SkinAnalysis
+
+        return SkinAnalysis(
+            primary_concerns=analysis_data["primary_concerns"],
+            skin_type=analysis_data["skin_type"],
+            triggers=analysis_data["triggers"],
+            goals=analysis_data["goals"],
+            sensitivity_level=analysis_data["sensitivity_level"],
+            ingredient_constraints=analysis_data["ingredient_constraints"],
+            summary=analysis_data["summary"],
+        )
+
+
+__all__ = ["RecommendationService"]

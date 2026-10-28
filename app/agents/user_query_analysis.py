@@ -1,87 +1,104 @@
 from __future__ import annotations
 
-from app.models import SkinAnalysis, SkinQuery
+from app.data.catalog import CATALOG
 
 
 class UserQueryAnalysisAgent:
-    """Rules-based agent that converts a user message into structured skin insights."""
+    """Converts a user message into structured skin insights and safety constraints."""
 
-    def analyze_query(self, query: SkinQuery) -> SkinAnalysis:
-        message = query.user_message.lower()
+    CONCERN_MAP = {
+        "acne": "acne",
+        "pimples": "acne",
+        "breakouts": "acne",
+        "dry": "dryness",
+        "dryness": "dryness",
+        "flaky": "dryness",
+        "oily": "oiliness",
+        "greasy": "oiliness",
+        "shine": "oiliness",
+        "redness": "redness",
+        "sensitive": "sensitivity",
+        "irritated": "sensitivity",
+        "dull": "dullness",
+        "texture": "texture",
+        "rough": "texture",
+        "dark spot": "hyperpigmentation",
+        "pigmentation": "hyperpigmentation",
+        "scar": "post-acne marks",
+        "barrier": "barrier repair",
+        "damaged skin": "barrier repair",
+        "eczema": "sensitivity",
+        "rosacea": "sensitivity",
+    }
+
+    def analyze_query(self, query) -> dict:
+        message = (query.user_message or "").lower()
 
         primary_concerns: list[str] = []
         triggers: list[str] = []
         goals: list[str] = []
 
-        concern_map = {
-            "acne": "acne",
-            "pimples": "acne",
-            "breakouts": "acne",
-            "dry": "dryness",
-            "flaky": "dryness",
-            "flaking": "dryness",
-            "oily": "oiliness",
-            "shine": "oiliness",
-            "redness": "redness",
-            "sensitive": "sensitivity",
-            "irritated": "sensitivity",
-            "dull": "dullness",
-            "texture": "texture",
-            "scar": "post-acne marks",
-            "dark spot": "hyperpigmentation",
-        }
-
-        for keyword, concern in concern_map.items():
+        for keyword, concern in self.CONCERN_MAP.items():
             if keyword in message:
                 primary_concerns.append(concern)
 
-        if "sun" in message or "sunburn" in message:
+        if any(word in message for word in ["sun", "sunburn", "uv", "outdoor"]):
             triggers.append("sun exposure")
         if "stress" in message:
             triggers.append("stress")
-        if "weather" in message or "cold" in message:
+        if any(word in message for word in ["winter", "cold", "weather"]):
             triggers.append("cold weather")
-        if "sweat" in message or "exercise" in message:
+        if any(word in message for word in ["hot", "sweat", "exercise"]):
             triggers.append("heat and sweat")
 
         if query.goals:
-            goals.extend(query.goals)
+            goals.extend(str(goal).lower() for goal in query.goals)
 
-        if "dry" in message or query.skin_type == "dry":
+        if any(word in message for word in ["dry", "flaky", "dehydrated"]):
             goals.append("hydration")
-        if "acne" in message or "breakout" in message:
+        if any(word in message for word in ["acne", "breakout", "pimple"]):
             goals.append("clear pores")
-        if "sensitive" in message or "irritated" in message:
+        if any(word in message for word in ["sensitive", "irritated", "redness"]):
             goals.append("soothing and barrier support")
-        if "dark spot" in message or "pigmentation" in message:
+        if any(word in message for word in ["dark spot", "pigmentation", "uneven tone"]):
             goals.append("brightening")
 
         if not primary_concerns:
             primary_concerns = ["general skin health"]
 
-        if query.skin_type:
-            skin_type = query.skin_type.lower()
-        elif "oily" in message:
-            skin_type = "oily"
-        elif "dry" in message or "flaky" in message:
-            skin_type = "dry"
-        elif "sensitive" in message:
-            skin_type = "sensitive"
-        else:
-            skin_type = "balanced"
+        skin_type = query.skin_type.lower() if query.skin_type else "balanced"
+        if not query.skin_type:
+            if "oily" in message or "greasy" in message:
+                skin_type = "oily"
+            elif "dry" in message or "flaky" in message:
+                skin_type = "dry"
+            elif "sensitive" in message:
+                skin_type = "sensitive"
+            else:
+                skin_type = "balanced"
 
-        sensitivity_level = "high" if "sensitive" in message or "irritated" in message else "moderate"
+        sensitivity_level = query.sensitivity_level.lower() if query.sensitivity_level else "moderate"
+        if not query.sensitivity_level and any(word in message for word in ["sensitive", "irritated", "burning"]):
+            sensitivity_level = "high"
+
+        ingredient_constraints = []
+        for allergy in query.allergies:
+            ingredient_constraints.append(str(allergy).lower())
 
         summary = (
-            f"The user describes {', '.join(primary_concerns)} with a {skin_type} skin profile. "
-            f"Key focus areas include {', '.join(goals) if goals else 'overall skin balance'}."
+            f"The user reports {', '.join(primary_concerns)} with a {skin_type} skin profile. "
+            f"Key goals include {', '.join(goals) if goals else 'overall skin balance'}."
         )
 
-        return SkinAnalysis(
-            primary_concerns=list(dict.fromkeys(primary_concerns)),
-            skin_type=skin_type,
-            triggers=list(dict.fromkeys(triggers)),
-            goals=list(dict.fromkeys(goals)),
-            sensitivity_level=sensitivity_level,
-            summary=summary,
-        )
+        return {
+            "primary_concerns": list(dict.fromkeys(primary_concerns)),
+            "skin_type": skin_type,
+            "triggers": list(dict.fromkeys(triggers)),
+            "goals": list(dict.fromkeys(goals)),
+            "sensitivity_level": sensitivity_level,
+            "ingredient_constraints": list(dict.fromkeys(ingredient_constraints)),
+            "summary": summary,
+        }
+
+
+__all__ = ["UserQueryAnalysisAgent"]

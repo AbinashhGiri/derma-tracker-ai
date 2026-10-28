@@ -1,18 +1,23 @@
 # DermaTracker AI
 
-DermaTracker AI is a starter product for skin-health tracking and AI-guided recommendations. The project includes an agent-based architecture for:
+DermaTracker AI is a clinical-style skincare recommendation engine for people who want better skin health guidance without guesswork. The app combines user-query analysis, product matching, ingredient safety checks, and a personalized routine planner.
 
-- user query analysis
-- product suggestions
-- skincare routine planning
-- skin-tracking insights
+## What the app does
 
-## Project structure
+- understands skin concerns from natural-language queries
+- detects likely skin type and sensitivity
+- flags allergens and harsh ingredients
+- recommends products from a curated catalog
+- builds a simple morning/evening routine
+- exposes a clean API and lightweight web UI
 
-- `app/agents/` — rule-based AI agents for query interpretation and recommendations
-- `app/data/` — structured product catalog and sample knowledge base
-- `app/services/` — orchestration layer that combines the agents
-- `app/main.py` — FastAPI API entry point
+## Architecture
+
+- `app/agents/` — AI-style agents for analysis, recommendation, and planning
+- `app/data/` — curated product catalog and product metadata
+- `app/services/` — orchestration layer
+- `app/main.py` — API and web entry point
+- `app/models.py` — validated request and response models
 
 ## Quick start
 
@@ -23,27 +28,34 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-## API example
+Then open:
+
+- API docs: http://localhost:8000/docs
+- App UI: http://localhost:8000/
+
+## Example request
 
 ```bash
 curl -X POST http://localhost:8000/recommendation \
   -H "Content-Type: application/json" \
   -d '{
-    "user_message": "I have dry, sensitive skin and am dealing with flaky patches and redness.",
+    "user_message": "I have dry, sensitive skin with redness and flaky patches. I want to repair my barrier and avoid fragrance.",
     "skin_type": "dry",
     "allergies": ["fragrance"],
     "goals": ["hydration", "barrier repair"],
-    "current_products": ["cleanser"]
+    "current_products": ["cleanser"],
+    "sensitivity_level": "high"
   }'
 ```
 
-## What is included
+## Product intelligence included
 
-This starter includes a lightweight “agent” system, not a full LLM service. It demonstrates how to:
+This version goes beyond a basic demo by adding:
 
-1. parse a user’s skin issue
-2. identify likely concerns and goals
-3. score relevant products from a catalog
-4. generate a personalized routine plan
+1. structured skin concern extraction
+2. ingredient-safety filtering based on allergies
+3. concern-to-product scoring with priors for skin type and sensitivity
+4. routine planning tailored to dry, oily, acne-prone, and sensitive skin
+5. lightweight UI for quick prototyping and demos
 
-You can later replace the rule-based logic with an LLM-powered agent or connect it to a real product database.
+The project is ready to extend into a real product database, authentication, user profiles, and LLM-backed recommendation logic.

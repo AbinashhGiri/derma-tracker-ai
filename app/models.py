@@ -11,6 +11,9 @@ class SkinQuery(BaseModel):
     allergies: List[str] = Field(default_factory=list)
     goals: List[str] = Field(default_factory=list)
     current_products: List[str] = Field(default_factory=list)
+    current_issues: List[str] = Field(default_factory=list)
+    climate: str = "moderate"
+    sensitivity_level: Optional[str] = None
 
 
 class SkinAnalysis(BaseModel):
@@ -19,6 +22,7 @@ class SkinAnalysis(BaseModel):
     triggers: List[str] = Field(default_factory=list)
     goals: List[str] = Field(default_factory=list)
     sensitivity_level: str = "moderate"
+    ingredient_constraints: List[str] = Field(default_factory=list)
     summary: str = ""
 
 
@@ -27,6 +31,7 @@ class ProductRecommendation(BaseModel):
     category: str
     score: float
     rationale: str
+    ingredients: List[str] = Field(default_factory=list)
 
 
 class RoutineStep(BaseModel):

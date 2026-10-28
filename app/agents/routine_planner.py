@@ -1,57 +1,54 @@
 from __future__ import annotations
 
-from app.models import RecommendationResponse, RoutineStep, SkinAnalysis
+from app.models import RoutineStep, SkinAnalysis
 
 
 class RoutinePlannerAgent:
-    """Creates a simple morning and evening routine based on the skin analysis."""
+    """Builds a pragmatic skincare routine for the detected skin needs."""
 
     def build_routine(self, analysis: SkinAnalysis) -> list[RoutineStep]:
-        steps: list[RoutineStep] = []
+        concern_set = set(analysis.primary_concerns)
 
-        if analysis.skin_type == "dry" or "dryness" in analysis.primary_concerns:
-            steps.extend(
-                [
-                    RoutineStep(time_of_day="Morning", step="Gentle cleanser", purpose="Clean without stripping the barrier."),
-                    RoutineStep(time_of_day="Morning", step="Hydrating serum", purpose="Deliver moisture and improve comfort."),
-                    RoutineStep(time_of_day="Morning", step="Barrier repair moisturizer", purpose="Seal in hydration and reduce flakiness."),
-                    RoutineStep(time_of_day="Morning", step="Broad-spectrum sunscreen", purpose="Protect against UV damage and irritation."),
-                    RoutineStep(time_of_day="Evening", step="Cleanser", purpose="Remove sunscreen and daily buildup."),
-                    RoutineStep(time_of_day="Evening", step="Moisturizer", purpose="Support hydration overnight."),
-                ]
-            )
-        elif analysis.skin_type == "oily" or "acne" in analysis.primary_concerns:
-            steps.extend(
-                [
-                    RoutineStep(time_of_day="Morning", step="Foaming cleanser", purpose="Reduce excess oil and debris."),
-                    RoutineStep(time_of_day="Morning", step="Niacinamide serum", purpose="Control oil and support a clearer appearance."),
-                    RoutineStep(time_of_day="Morning", step="Lightweight moisturizer", purpose="Hydrate without clogging pores."),
-                    RoutineStep(time_of_day="Morning", step="Sunscreen", purpose="Prevent UV-triggered breakouts and pigmentation."),
-                    RoutineStep(time_of_day="Evening", step="Cleanser", purpose="Remove sunscreen, sweat, and excess oil."),
-                    RoutineStep(time_of_day="Evening", step="Targeted treatment", purpose="Use acne-supportive ingredients on affected zones."),
-                    RoutineStep(time_of_day="Evening", step="Moisturizer", purpose="Rebalance hydration after treatment."),
-                ]
-            )
+        if "dryness" in concern_set or analysis.skin_type == "dry":
+            steps = [
+                RoutineStep(time_of_day="Morning", step="Gentle hydrating cleanser", purpose="Cleans without stripping the barrier."),
+                RoutineStep(time_of_day="Morning", step="Hydrating serum with glycerin or hyaluronic acid", purpose="Boosts moisture and improves comfort."),
+                RoutineStep(time_of_day="Morning", step="Barrier repair moisturizer", purpose="Locks in hydration and reduces tightness."),
+                RoutineStep(time_of_day="Morning", step="Mineral sunscreen SPF 30+", purpose="Protects from UV damage and irritation."),
+                RoutineStep(time_of_day="Evening", step="Cream cleanser", purpose="Removes sunscreen and pollutants while staying gentle."),
+                RoutineStep(time_of_day="Evening", step="Ceramide-rich moisturizer", purpose="Supports overnight repair and reduces flaking."),
+            ]
+        elif "acne" in concern_set or analysis.skin_type == "oily":
+            steps = [
+                RoutineStep(time_of_day="Morning", step="Foaming cleanser", purpose="Clears excess oil and keeps pores feeling fresh."),
+                RoutineStep(time_of_day="Morning", step="Niacinamide serum", purpose="Helps reduce oil production and redness."),
+                RoutineStep(time_of_day="Morning", step="Lightweight moisturizer", purpose="Maintains hydration without clogging pores."),
+                RoutineStep(time_of_day="Morning", step="Broad-spectrum sunscreen", purpose="Prevents UV-triggered post-acne pigmentation."),
+                RoutineStep(time_of_day="Evening", step="Cleanser", purpose="Removes excess oil and product residue."),
+                RoutineStep(time_of_day="Evening", step="Targeted treatment (if needed)", purpose="Treat active breakouts while keeping the routine balanced."),
+                RoutineStep(time_of_day="Evening", step="Oil-free moisturizer", purpose="Prevents rebound dryness after treatment."),
+            ]
         else:
-            steps.extend(
-                [
-                    RoutineStep(time_of_day="Morning", step="Gentle cleanser", purpose="Refresh without irritation."),
-                    RoutineStep(time_of_day="Morning", step="Vitamin C serum", purpose="Support brightness and overall skin clarity."),
-                    RoutineStep(time_of_day="Morning", step="Light moisturizer", purpose="Balance hydration."),
-                    RoutineStep(time_of_day="Morning", step="Sunscreen", purpose="Daily protection."),
-                    RoutineStep(time_of_day="Evening", step="Cleanser", purpose="Remove impurities and sunscreen."),
-                    RoutineStep(time_of_day="Evening", step="Barrier cream", purpose="Repair the skin barrier overnight."),
-                ]
-            )
+            steps = [
+                RoutineStep(time_of_day="Morning", step="Gentle cleanser", purpose="Refreshes skin without irritation."),
+                RoutineStep(time_of_day="Morning", step="Vitamin C or niacinamide serum", purpose="Supports brightness and even tone."),
+                RoutineStep(time_of_day="Morning", step="Light moisturizer", purpose="Balances hydration."),
+                RoutineStep(time_of_day="Morning", step="Sunscreen", purpose="Daily protection against UV damage."),
+                RoutineStep(time_of_day="Evening", step="Cleanser", purpose="Removes sunscreen and impurities."),
+                RoutineStep(time_of_day="Evening", step="Repair cream", purpose="Supports overnight barrier recovery."),
+            ]
 
         if analysis.sensitivity_level == "high":
             steps = [
-                RoutineStep(time_of_day="Morning", step="Minimal cleanser", purpose="Limit exposure to harsh surfactants."),
-                RoutineStep(time_of_day="Morning", step="Soothing toner", purpose="Calm redness and minimize discomfort."),
-                RoutineStep(time_of_day="Morning", step="Barrier moisturizer", purpose="Support the skin barrier."),
-                RoutineStep(time_of_day="Morning", step="Mineral sunscreen", purpose="Low-irritation daily protection."),
-                RoutineStep(time_of_day="Evening", step="Gentle cleanser", purpose="Remove dirt without over-cleansing."),
-                RoutineStep(time_of_day="Evening", step="Barrier repair cream", purpose="Reinforce hydration and skin comfort."),
+                RoutineStep(time_of_day="Morning", step="Minimal fragrance-free cleanser", purpose="Avoids triggering irritation."),
+                RoutineStep(time_of_day="Morning", step="Soothing toner or hydrating essence", purpose="Calms redness and strengthens comfort."),
+                RoutineStep(time_of_day="Morning", step="Barrier moisturizer", purpose="Reinforces hydration and reduces stinging."),
+                RoutineStep(time_of_day="Morning", step="Mineral sunscreen", purpose="Low-irritation UV protection."),
+                RoutineStep(time_of_day="Evening", step="Gentle cleanser", purpose="Keeps cleansing simple and non-stripping."),
+                RoutineStep(time_of_day="Evening", step="Barrier repair cream", purpose="Supports recovery while the skin is resting."),
             ]
 
         return steps
+
+
+__all__ = ["RoutinePlannerAgent"]
