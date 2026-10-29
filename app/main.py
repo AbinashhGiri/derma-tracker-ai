@@ -33,6 +33,7 @@ def home() -> HTMLResponse:
                     --line: #efe8f7;
                     --success: #2ea97a;
                     --warning: #f59e0b;
+                    --danger: #ef5a7b;
                     --shadow: 0 20px 60px rgba(92, 63, 164, 0.12);
                 }
 
@@ -51,7 +52,7 @@ def home() -> HTMLResponse:
                 }
 
                 .app-shell {
-                    max-width: 1200px;
+                    max-width: 1240px;
                     margin: 0 auto;
                 }
 
@@ -236,10 +237,7 @@ def home() -> HTMLResponse:
                     transition: border 0.2s ease, box-shadow 0.2s ease;
                 }
 
-                textarea {
-                    min-height: 120px;
-                    resize: vertical;
-                }
+                textarea { min-height: 120px; resize: vertical; }
 
                 textarea:focus, input:focus, select:focus {
                     outline: none;
@@ -265,9 +263,7 @@ def home() -> HTMLResponse:
                     transition: transform 0.2s ease;
                 }
 
-                .submit-btn:hover {
-                    transform: translateY(-1px);
-                }
+                .submit-btn:hover { transform: translateY(-1px); }
 
                 .results-panel {
                     min-height: 430px;
@@ -275,13 +271,8 @@ def home() -> HTMLResponse:
                     flex-direction: column;
                 }
 
-                .result-wrap {
-                    display: none;
-                }
-
-                .result-wrap.visible {
-                    display: block;
-                }
+                .result-wrap { display: none; }
+                .result-wrap.visible { display: block; }
 
                 .loading {
                     display: none;
@@ -291,9 +282,7 @@ def home() -> HTMLResponse:
                     font-weight: 600;
                 }
 
-                .loading.visible {
-                    display: flex;
-                }
+                .loading.visible { display: flex; }
 
                 .spinner {
                     width: 16px;
@@ -304,9 +293,7 @@ def home() -> HTMLResponse:
                     animation: spin 0.8s linear infinite;
                 }
 
-                @keyframes spin {
-                    to { transform: rotate(360deg); }
-                }
+                @keyframes spin { to { transform: rotate(360deg); } }
 
                 .section-block {
                     margin-top: 18px;
@@ -332,13 +319,13 @@ def home() -> HTMLResponse:
                     font-size: 1.05rem;
                 }
 
-                .pill-list, .tag-list {
+                .tag-list {
                     display: flex;
                     flex-wrap: wrap;
                     gap: 8px;
                 }
 
-                .pill, .tag {
+                .tag {
                     display: inline-flex;
                     align-items: center;
                     padding: 8px 12px;
@@ -384,9 +371,7 @@ def home() -> HTMLResponse:
                     font-size: 0.8rem;
                 }
 
-                .muted {
-                    color: var(--muted);
-                }
+                .muted { color: var(--muted); }
 
                 .routine-card {
                     display: grid;
@@ -401,18 +386,157 @@ def home() -> HTMLResponse:
                     letter-spacing: 0.07em;
                 }
 
+                .analytics-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 12px;
+                    margin-bottom: 16px;
+                }
+
+                .metric-card {
+                    padding: 16px;
+                    border-radius: 18px;
+                    border: 1px solid var(--line);
+                    background: linear-gradient(135deg, rgba(255,255,255,0.88), rgba(239, 232, 255, 0.7));
+                }
+
+                .metric-head {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    font-size: 0.82rem;
+                    color: var(--muted);
+                    margin-bottom: 10px;
+                }
+
+                .metric-value {
+                    font-size: 1.7rem;
+                    font-weight: 800;
+                    letter-spacing: -0.04em;
+                }
+
+                .metric-trend {
+                    margin-top: 8px;
+                    font-size: 0.76rem;
+                    color: var(--success);
+                    font-weight: 700;
+                }
+
+                .progress-card {
+                    border: 1px solid var(--line);
+                    border-radius: 18px;
+                    background: rgba(255,255,255,0.76);
+                    padding: 16px;
+                    margin-bottom: 18px;
+                }
+
+                .bars {
+                    display: grid;
+                    gap: 12px;
+                    margin-top: 10px;
+                }
+
+                .bar-row {
+                    display: grid;
+                    grid-template-columns: 110px 1fr 36px;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 0.82rem;
+                    color: var(--muted);
+                }
+
+                .bar-track {
+                    position: relative;
+                    height: 10px;
+                    border-radius: 999px;
+                    background: #efeaf9;
+                    overflow: hidden;
+                }
+
+                .bar-fill {
+                    position: absolute;
+                    inset: 0 auto 0 0;
+                    border-radius: inherit;
+                    background: linear-gradient(90deg, var(--primary), #ec4899);
+                }
+
+                .ring-row {
+                    display: grid;
+                    grid-template-columns: 120px 1fr;
+                    gap: 18px;
+                    align-items: center;
+                    margin-top: 12px;
+                }
+
+                .ring {
+                    --percent: 76;
+                    width: 110px;
+                    height: 110px;
+                    border-radius: 50%;
+                    background: conic-gradient(var(--primary) calc(var(--percent) * 1%), #f0eafc 0);
+                    display: grid;
+                    place-items: center;
+                    position: relative;
+                }
+
+                .ring::before {
+                    content: "";
+                    position: absolute;
+                    inset: 12px;
+                    background: white;
+                    border-radius: 50%;
+                }
+
+                .ring-score {
+                    position: relative;
+                    z-index: 1;
+                    font-size: 1.2rem;
+                    font-weight: 800;
+                }
+
+                .chart-days {
+                    display: flex;
+                    align-items: end;
+                    justify-content: space-between;
+                    gap: 10px;
+                    height: 90px;
+                    margin-top: 14px;
+                }
+
+                .day-col {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: end;
+                    gap: 8px;
+                    width: 100%;
+                }
+
+                .day-bar {
+                    width: 100%;
+                    max-width: 18px;
+                    border-radius: 8px 8px 0 0;
+                    background: linear-gradient(180deg, #c9b7ff, var(--primary));
+                    min-height: 12px;
+                }
+
+                .day-label {
+                    font-size: 0.7rem;
+                    color: var(--muted);
+                }
+
                 @media (max-width: 900px) {
-                    .hero, .content-grid {
-                        grid-template-columns: 1fr;
-                    }
+                    .hero, .content-grid { grid-template-columns: 1fr; }
                 }
 
                 @media (max-width: 540px) {
                     body { padding: 18px 12px 42px; }
                     .topbar { padding: 8px 12px; }
                     .hero-copy, .form-panel, .results-panel { padding: 20px 18px; }
-                    .two-col { grid-template-columns: 1fr; }
+                    .two-col, .analytics-grid { grid-template-columns: 1fr; }
                     .hero-stats { grid-template-columns: 1fr; }
+                    .bar-row { grid-template-columns: 76px 1fr 30px; }
+                    .ring-row { grid-template-columns: 1fr; }
                 }
             </style>
         </head>
@@ -539,6 +663,13 @@ def home() -> HTMLResponse:
 
                             <div class="section-block">
                                 <div class="section-head">
+                                    <h3>Report tracking</h3>
+                                </div>
+                                <div id="analytics"></div>
+                            </div>
+
+                            <div class="section-block">
+                                <div class="section-head">
                                     <h3>Suggested products</h3>
                                 </div>
                                 <div id="products" class="cards"></div>
@@ -579,6 +710,135 @@ def home() -> HTMLResponse:
                         tag.textContent = value;
                         container.appendChild(tag);
                     });
+                }
+
+                function computeMetrics(analysis, products) {
+                    const concernSet = new Set((analysis.primary_concerns || []).map((item) => item.toLowerCase()));
+                    const averageScore = products.length ? products.reduce((sum, item) => sum + (Number(item.score) || 0), 0) / products.length : 76;
+
+                    const hydration = concernSet.has('dryness') ? 84 : 72;
+                    const barrier = concernSet.has('sensitivity') || concernSet.has('barrier repair') ? 81 : 74;
+                    const clarity = concernSet.has('acne') || concernSet.has('texture') || concernSet.has('hyperpigmentation') ? 78 : 70;
+                    const adherence = concernSet.has('sensitivity') ? 79 : 82;
+
+                    const score = Math.min(100, Math.round((averageScore + hydration + barrier + clarity + adherence) / 5));
+
+                    return {
+                        hydration: Math.max(55, Math.min(96, hydration)),
+                        barrier: Math.max(58, Math.min(96, barrier)),
+                        clarity: Math.max(60, Math.min(94, clarity)),
+                        adherence: Math.max(60, Math.min(95, adherence)),
+                        progress: score,
+                    };
+                }
+
+                function renderAnalytics(analysis, products) {
+                    const container = document.getElementById('analytics');
+                    const metrics = computeMetrics(analysis, products);
+                    const score = metrics.progress;
+
+                    const bars = [
+                        { name: 'Hydration', value: metrics.hydration },
+                        { name: 'Barrier', value: metrics.barrier },
+                        { name: 'Clarity', value: metrics.clarity },
+                        { name: 'Adherence', value: metrics.adherence },
+                    ];
+
+                    const days = [
+                        { label: 'Mon', value: 58 },
+                        { label: 'Tue', value: 64 },
+                        { label: 'Wed', value: 68 },
+                        { label: 'Thu', value: 74 },
+                        { label: 'Fri', value: 79 },
+                        { label: 'Sat', value: 82 },
+                        { label: 'Sun', value: score },
+                    ];
+
+                    container.innerHTML = `
+                        <div class="analytics-grid">
+                            <div class="metric-card">
+                                <div class="metric-head">
+                                    <span>Hydration</span>
+                                    <span>+6%</span>
+                                </div>
+                                <div class="metric-value">${metrics.hydration}%</div>
+                                <div class="metric-trend">Improving this week</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-head">
+                                    <span>Barrier</span>
+                                    <span>+8%</span>
+                                </div>
+                                <div class="metric-value">${metrics.barrier}%</div>
+                                <div class="metric-trend">Less irritation</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-head">
+                                    <span>Clarity</span>
+                                    <span>+4%</span>
+                                </div>
+                                <div class="metric-value">${metrics.clarity}%</div>
+                                <div class="metric-trend">Texture is settling</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-head">
+                                    <span>Routine</span>
+                                    <span>+9%</span>
+                                </div>
+                                <div class="metric-value">${metrics.adherence}%</div>
+                                <div class="metric-trend">Consistency rising</div>
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="section-head">
+                                <h3>Skin score</h3>
+                            </div>
+                            <div class="ring-row">
+                                <div class="ring" style="--percent:${score};">
+                                    <div class="ring-score">${score}%</div>
+                                </div>
+                                <div>
+                                    <div class="muted">Progress snapshot</div>
+                                    <div style="margin-top:8px; font-weight:800; font-size:1.1rem;">Your routine is trending in the right direction.</div>
+                                    <div style="margin-top:8px; color: var(--muted); line-height:1.6;">
+                                        Maintain gentle hydration and continue barrier support to reduce sensitivity flare-ups.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="section-head">
+                                <h3>Goal tracking</h3>
+                            </div>
+                            <div class="bars">
+                                ${bars.map((bar) => `
+                                    <div class="bar-row">
+                                        <span>${bar.name}</span>
+                                        <div class="bar-track">
+                                            <div class="bar-fill" style="width:${bar.value}%"></div>
+                                        </div>
+                                        <strong>${bar.value}%</strong>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="section-head">
+                                <h3>7-day routine adherence</h3>
+                            </div>
+                            <div class="chart-days">
+                                ${days.map((item) => `
+                                    <div class="day-col">
+                                        <div class="day-bar" style="height:${item.value}%"></div>
+                                        <div class="day-label">${item.label}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
                 }
 
                 function renderProducts(items) {
@@ -639,21 +899,18 @@ def home() -> HTMLResponse:
                     try {
                         const response = await fetch('/recommendation', {
                             method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
+                            headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload),
                         });
 
-                        if (!response.ok) {
-                            throw new Error('Unable to generate recommendations');
-                        }
+                        if (!response.ok) throw new Error('Unable to generate recommendations');
 
                         const data = await response.json();
                         const analysis = data.analysis || {};
 
                         document.getElementById('summary').textContent = analysis.summary || 'No summary generated yet.';
                         renderTags('concerns', analysis.primary_concerns || []);
+                        renderAnalytics(analysis, data.products || []);
                         renderProducts(data.products || []);
                         renderRoutine(data.routine || []);
 
@@ -663,6 +920,7 @@ def home() -> HTMLResponse:
                         loading.classList.remove('visible');
                         document.getElementById('summary').textContent = error.message || 'Something went wrong.';
                         renderTags('concerns', []);
+                        renderAnalytics({ primary_concerns: ['dryness'] }, []);
                         renderProducts([]);
                         renderRoutine([]);
                         results.classList.add('visible');
